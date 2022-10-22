@@ -1,11 +1,11 @@
 <?php
 
-include_once (__DIR__ . './userdb.php');
-include_once (__DIR__ . './token.php');
-include_once (__DIR__ . './classes.php');
-include_once (__DIR__ . './dotenv.php');
+include_once ('./userdb.php');
+include_once ('./token.php');
+include_once ('./classes.php');
+include_once ('./dotenv.php');
 
-require (__DIR__ . './vendor/autoload.php');
+require ('./vendor/autoload.php');
 use \Firebase\JWT\JWT;
 
 //CORSE compatibility
@@ -75,7 +75,7 @@ try
                 $user->email = $email;
 
                 //load .env file
-                $dotenv = new DotEnv(__DIR__ . './config/.env');
+                $dotenv = new DotEnv('./config/.env');
                 $dotenv->load();
         
                 //Get jwt parameters

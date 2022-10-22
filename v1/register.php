@@ -1,6 +1,6 @@
 <?php
 
-include_once (__DIR__ . './userdb.php');
+include_once ('./userdb.php');
 
 //CORSE compatibility
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {

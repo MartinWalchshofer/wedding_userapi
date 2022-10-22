@@ -1,7 +1,7 @@
 <?php
 
-include_once (__DIR__ . './dotenv.php');
-include_once (__DIR__ . './classes.php');
+include_once ('./dotenv.php');
+include_once ('./classes.php');
 
 class UserDatabase{
 
@@ -36,7 +36,7 @@ class UserDatabase{
         try
         {
             //load .env file
-            $dotenv = new DotEnv(__DIR__ . './config/.env');
+            $dotenv = new DotEnv('./config/.env');
             $dotenv->load();
 
             $this->db_host = getenv('DBUSR_HOST');
