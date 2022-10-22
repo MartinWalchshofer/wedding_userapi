@@ -24,6 +24,6 @@ else
 }
 
 http_response_code(200);
-echo json_encode(array("message" => "Wedding userapi V.1.0"));
+echo json_encode(array("message" => "wedding userapi v.0.1"));
 
 ?>

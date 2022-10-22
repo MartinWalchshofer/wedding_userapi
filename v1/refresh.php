@@ -114,7 +114,7 @@ try
     else
     {
         http_response_code(401);
-        echo json_encode(array("error" => "Refresh failed. No token provided."));
+        echo json_encode(array("error" => "Refresh failed. No or invalid token provided."));
     }
 }
 catch(Exception $e)
