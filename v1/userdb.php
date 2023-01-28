@@ -11,6 +11,9 @@ class UserDatabase{
     //table containing tokens
     private const TOKENS_TABLENAME = 'tokens';
 
+    //table containing responses
+    private const RESPONSES_TABLENAME = 'responses';
+
     //database access data
     private string $db_host;
     private string $db_name;
@@ -420,6 +423,41 @@ class UserDatabase{
 
             //form sql command for inserting data
             $table_name = self::TOKENS_TABLENAME;
+
+            $query = "INSERT INTO " . $table_name . "(
+                iduser, 
+                refreshtoken) 
+                VALUES (
+                    :token,
+                    :iduser)";
+            
+            $stmt = $conn->prepare($query);
+            $stmt->bindParam(':token', $user->iduser);
+            $stmt->bindParam(':iduser', $token);
+
+            //execute sql statement
+            if(!$stmt->execute())
+                throw new Exception('Could not store refresh token');
+        }
+        catch(Exception $ex)
+        {
+            throw $ex;
+        }
+    }
+
+    public function AddResponse(User $user, string $token) : void
+    {
+        try
+        {
+            //check if valid user id is provided
+            if(!$this->UserIDExists($user->iduser))
+                throw new Exception('Unknown user.');
+
+            //get connection handle
+            $conn = $this->GetConnection();
+
+            //form sql command for inserting data
+            $table_name = self::AddResponse;
 
             $query = "INSERT INTO " . $table_name . "(
                 iduser, 

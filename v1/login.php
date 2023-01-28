@@ -33,7 +33,7 @@ try
 {
     //get parameters
     $data = json_decode(file_get_contents("php://input"));
-    $email = $data->email;
+    $user = $data->user;
     $password = $data->password;
     $app = $data->application;
     $device = $data->device;
@@ -44,7 +44,7 @@ try
 
     //SQL query - get user
     $table_name = 'users';
-    $query = "SELECT * FROM " . $table_name . " WHERE email = '" . $email . "'";
+    $query = "SELECT * FROM " . $table_name . " WHERE user_name = '" . $user . "'";
     $stmt = $conn->prepare( $query );
     $stmt->execute();
     $num = $stmt->rowCount();
