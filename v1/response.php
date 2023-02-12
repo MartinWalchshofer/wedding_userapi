@@ -82,8 +82,6 @@ try {
         if( !isset ( $data->comments))
             throw new Exception('No comments set.');
         
-
-            
         //Add response to database
         $database->DeleteResponses($user);
         $database->AddResponse($user, $data->answer, $data->adults, $data->children, $data->comments);

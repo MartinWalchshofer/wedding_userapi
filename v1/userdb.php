@@ -406,12 +406,12 @@ class UserDatabase{
         $conn = $this->GetConnection();
 
         $table_name = self::TOKENS_TABLENAME;
-        $query = "DELETE FROM " . $table_name . " WHERE iduser = '" . $user->id . "'";
+        $query = "DELETE FROM " . $table_name . " WHERE iduser = '" . $user->iduser . "'";
         $stmt = $conn->prepare( $query );
         $stmt->execute();
 
         if(!$stmt->execute())
-            throw new Exception('Could not delete tokens from user with id ' . $user->id);
+            throw new Exception('Could not delete tokens from user with id ' . $user->iduser);
     }
 
     public function StoreRefreshToken(User $user, string $token) : void
@@ -455,7 +455,7 @@ class UserDatabase{
         $conn = $this->GetConnection();
 
         $table_name = self::RESPONSES_TABLENAME;
-        $query = "DELETE FROM " . $table_name . " WHERE iduser = '" . $user->id . "'";
+        $query = "DELETE FROM " . $table_name . " WHERE iduser = '" . $user->iduser . "';";
         $stmt = $conn->prepare( $query );
         $stmt->execute();
 
