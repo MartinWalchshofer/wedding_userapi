@@ -1,7 +1,10 @@
 <?php
 
+
 include_once ('./dotenv.php');
 include_once ('./classes.php');
+//include_once (__DIR__ . './dotenv.php');
+//include_once (__DIR__ .'./classes.php');
 
 class UserDatabase{
 
@@ -40,6 +43,7 @@ class UserDatabase{
         {
             //load .env file
             $dotenv = new DotEnv('./config/.env');
+            //$dotenv = new DotEnv(__DIR__ . './config/.env');
             $dotenv->load();
 
             $this->db_host = getenv('DBUSR_HOST');
@@ -428,12 +432,12 @@ class UserDatabase{
                 iduser, 
                 refreshtoken) 
                 VALUES (
-                    :token,
-                    :iduser)";
+                    :iduser,
+                    :token)";
             
             $stmt = $conn->prepare($query);
-            $stmt->bindParam(':token', $user->iduser);
-            $stmt->bindParam(':iduser', $token);
+            $stmt->bindParam(':iduser', $user->iduser);
+            $stmt->bindParam(':token', $token);
 
             //execute sql statement
             if(!$stmt->execute())
@@ -445,7 +449,21 @@ class UserDatabase{
         }
     }
 
-    public function AddResponse(User $user, string $token) : void
+    public function DeleteResponses(User $user) : void
+    {
+        //get connection handle
+        $conn = $this->GetConnection();
+
+        $table_name = self::RESPONSES_TABLENAME;
+        $query = "DELETE FROM " . $table_name . " WHERE iduser = '" . $user->id . "'";
+        $stmt = $conn->prepare( $query );
+        $stmt->execute();
+
+        if(!$stmt->execute())
+            throw new Exception('Could not delete tokens from user with id ' . $user->id);
+    }
+
+    public function AddResponse(User $user, string $answer, int $numberOfAdults, int $numberOfChildren, string $comments) : void
     {
         try
         {
@@ -457,22 +475,33 @@ class UserDatabase{
             $conn = $this->GetConnection();
 
             //form sql command for inserting data
-            $table_name = self::AddResponse;
-
+            $table_name = self::RESPONSES_TABLENAME;
             $query = "INSERT INTO " . $table_name . "(
-                iduser, 
-                refreshtoken) 
+                iduser,
+                name,
+                response, 
+                adults, 
+                children, 
+                comments) 
                 VALUES (
-                    :token,
-                    :iduser)";
-            
+                    :iduser,
+                    :name,
+                    :response,
+                    :adults,
+                    :children,
+                    :comments)";
             $stmt = $conn->prepare($query);
-            $stmt->bindParam(':token', $user->iduser);
-            $stmt->bindParam(':iduser', $token);
+            $stmt->bindParam(':iduser', $user->iduser);
+            $name = $user->first_name . ' ' . $user->last_name;
+            $stmt->bindParam(':name', $name);
+            $stmt->bindParam(':response', $answer);
+            $stmt->bindParam(':adults', $numberOfAdults);
+            $stmt->bindParam(':children', $numberOfChildren);
+            $stmt->bindParam(':comments', $comments);
 
             //execute sql statement
             if(!$stmt->execute())
-                throw new Exception('Could not store refresh token');
+                throw new Exception('Could not store response');
         }
         catch(Exception $ex)
         {

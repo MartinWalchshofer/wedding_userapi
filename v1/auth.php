@@ -1,6 +1,7 @@
 <?php
 
-require "./vendor/autoload.php";
+require  "./vendor/autoload.php";
+//require __DIR__ . "./vendor/autoload.php";
 use \Firebase\JWT\JWT;
 
 class Auth
@@ -11,6 +12,7 @@ class Auth
     const ERROR_CODE_INVALID_REQUEST = 2;
 
     private static $lastMessage = "";
+    private static $lastDecoded= "";
 
     //returns the last error message
     public static function GetLastErrorMessage() : string
@@ -18,30 +20,25 @@ class Auth
         return self::$lastMessage;
     }
 
-    public static function CheckAccess($secret_key) : int
+    //returns the last error message
+    public static function GetLastDecoded() : string
+    {
+        return json_encode(self::$lastDecoded->data);
+    }
+
+    public static function CheckAccess($secret_key, $jwt) : int
     {
         $errorCode = self::ERROR_ACCESS_DENIED;
-        $lastMessage = "";
+        self::$lastMessage = "";
         try
         {
-            //get authorization header
-            $headers = getallheaders();
-
-            if(!isset($headers['Authorization']))
-                throw new Exception("No authorization header available.");
-
-            $authHeader = $headers["Authorization"];
-            $jwt = null;
-
-            $arr = explode(" ", $authHeader);
-            $jwt = $arr[1];
             if($jwt)
             {
                 try 
                 {
                     //decode jwt
-                    $decoded = JWT::decode($jwt, $secret_key, array('HS256'));
-
+                    self::$lastDecoded = JWT::decode($jwt, $secret_key, array('HS256'));
+                     
                     //TODO VALIDATE TOKEN
 
                     //TODO

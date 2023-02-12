@@ -56,41 +56,14 @@ try {
         //decode input and write it to data object
         $input = file_get_contents("php://input");
         $data = json_decode($input);
-
         $decoded = json_decode(Auth::GetLastDecoded());
         $user = $database->GetUserById($decoded->id);
         
-        //check if all required fields exist and are set
-        if(!isset($data) || empty($data))
-            throw new Exception('No input data available.');
-
-        if( !property_exists ( $data, 'answer') || 
-            !property_exists ( $data, 'adults')|| 
-            !property_exists ( $data, 'children')|| 
-            !property_exists ( $data, 'comments')) 
-            throw new Exception('Required property does not exist.');
-
-        if( !isset ( $data->answer))
-            throw new Exception('No answer set.');
-
-        if( !isset ( $data->adults))
-            throw new Exception('No adults set.');
-
-        if( !isset ( $data->children))
-            throw new Exception('No children set.');
-
-        if( !isset ( $data->comments))
-            throw new Exception('No comments set.');
-        
-
-            
-        //Add response to database
-        $database->DeleteResponses($user);
-        $database->AddResponse($user, $data->answer, $data->adults, $data->children, $data->comments);
         http_response_code(200);
         echo json_encode(array(
-                "message" => "Success.",
-        ));
+            "first_name" => $user->first_name,
+            "last_name" => $user->last_name,
+            ));
     }
     else
     {  

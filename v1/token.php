@@ -1,8 +1,9 @@
 <?php
 
 include_once ('./classes.php');
-
 require ('./vendor/autoload.php');
+//include_once (__DIR__ . './classes.php');
+//require (__DIR__ . './vendor/autoload.php');
 use \Firebase\JWT\JWT;
 
 class Token

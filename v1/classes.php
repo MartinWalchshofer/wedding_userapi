@@ -16,4 +16,10 @@ class UserToken
     public string $refreshtoken;
 }
 
+class Response 
+{
+    public int $iduser;
+    public string $name;
+}
+
 ?>
